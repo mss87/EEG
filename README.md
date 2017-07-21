@@ -8,3 +8,4 @@ Partiendo de esa informacion estoy tratando de lograr un abordaje hecho a la med
 
 El script esta orientado particularmente a un experimento concreto que estoy desarrollando, en base a ello son los tiempos utilizados.
 
+En este experimento el primer minuto consiste en la produccion de ondas alfas, por lo tanto el primer minuto está destinado a un abordaje especial.
