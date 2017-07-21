@@ -1,6 +1,6 @@
 # EEG
 
-Script en costruccion diseÃ±ado para matlab.
+Script en costruccion diseñado para matlab.
 
 La finalidad es un abordaje a la dinamica de los voltajes cerebrales, de acuerdo a las mediciones tomadas por medio del sistema OpenBCI, mismo que registra potenciales electricos en formato CSV (entre otros).
 
