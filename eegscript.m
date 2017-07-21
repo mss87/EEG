@@ -59,7 +59,7 @@ end
 clear('ii','jj');
 
 %%
-% Determinacion varianza, asignandola a la variable _*"vv"*_. 
+% Determinacion de la varianza, asignandola a la variable _*"vv"*_. 
 % 8 canales con 10 bloques, cada cual conteniendo la varianza
 % de los 12,500 voltajes de su bloque.
 
@@ -128,10 +128,27 @@ end
 clear('ii','jj');
 
 %%
+% Determinacion de la media aritmetica de la diferencia de voltajes,
+% asignada a la variable _*"mdv"*_
+
+mdv = cell(1,8);
+for ii = 1:8
+    mdv{ii} = zeros(1,10);
+end
+clear ii;
+
+for ii = 1:8
+    for jj = 1:10
+        mdv{ii}(jj) = mean(dv{ii}{jj});
+    end
+end
+clear('ii','jj');
+
+%%
 % Determinacion de la potencia angular, partiendo de la distribucion de ±90
 % grados de ±3 desviaciones estandares de las diferencias de voltaje,
 % considerando ese rango como el hemicirculo propio de la distribucion
-% anterograda del voltaje a travez del vector del tiempo. La varable
+% anterograda del voltaje a travez del vector del tiempo. La variable
 % _*"ang"*_ contendra en el formato general, la potencia angular calculada
 % como ±90 grados entre 6 desviaciones estandares de la diferencia
 % voltaica.
@@ -195,7 +212,7 @@ for ii = 1:8
         end
     end
 end
-clear('ii','jj','kk')
+clear('ii','jj','kk','ploa')
 
 %%
 %%
@@ -227,11 +244,11 @@ for ii = 1:8
         end
     end
 end
-clear('ii','jj','kk')
+clear('ii','jj','kk','plod')
 
 %%
-% Asignacion de variables loam y lodm con los valores maximos de elementos
-% contiguos > 0 y < 0 respectivamente.
+% Asignacion de variables _*"loam"*_ y _*"lodm"*_ con los valores maximos de elementos
+% contiguos mayores y menores a 0 respectivamente.
 
 loam = cell(1,8);
 lodm = cell(1,8);
@@ -250,28 +267,51 @@ end
 clear('ii','jj')
 
 %%
-% Asignacion de variable sloa y slod para la suma de valores contiguos
-% totales, determinando la totalidad de hemi-ondas positivas y negativas de
+% Asignacion de variable _*"loas"*_ y _*"lods"*_ para la suma de valores contiguos
+% totales, determinando la totalidad de _hemi-ondas_ positivas y negativas de
 % donde 1 = 1/250 segundos, tomando en cuenta un registro a 250 Hz.
 %%
 % Debido a que para existir valores >1, previamente  deben existir existir
-% valores 1...n-1, cuando n es >1 se restara al valor n-1 el valor de n.
+% valores 1..._"n-1"_, cuando _"n"_ es >1 se restara al valor _"n-1"_ el valor de _"n"_.
+% Para obtener asi los valores de _"n"_, propios de _"n"_ y no necesariamente, los
+% precursores de _"n+1"_.
 
 for ii = 1:8
     for jj = 1:10
         for kk = 1:8
-        sloa{ii}{jj}{kk} = sum(loa{ii}{jj} == kk);
-        slod{ii}{jj}{kk} = sum(lod{ii}{jj} == kk);
+        loas{ii}{jj}{kk} = sum(loa{ii}{jj} == kk);
+        lods{ii}{jj}{kk} = sum(lod{ii}{jj} == kk);
         if kk > 1
-            sloa{ii}{jj}{kk - 1} = (sloa{ii}{jj}{kk - 1}) - (sloa{ii}{jj}{kk});
-            slod{ii}{jj}{kk - 1} = (slod{ii}{jj}{kk - 1}) - (slod{ii}{jj}{kk});
+            loas{ii}{jj}{kk - 1} = (loas{ii}{jj}{kk - 1}) - (loas{ii}{jj}{kk});
+            lods{ii}{jj}{kk - 1} = (lods{ii}{jj}{kk - 1}) - (lods{ii}{jj}{kk});
         end
         end
     end
 end
+clear('ii','jj','kk')
 
-toc
+fprintf('Glosario:\n')
+fprintf('alfa: valores del primer minuto con ondas alfa provocadas.\n')
+fprintf('ang:  valores de potencia angular ±90(6 Desviaciones estandares de la diferencia de voltajes.\n')
+fprintf('dv:   resultado de la diferencia de voltajes contiguos "n-(n-1)".\n')
+fprintf('fsdv: espacio que transcurre entre 6 desviaciones estandares (±3).\n')
+fprintf('loa:  valores logicos cuya diferencia de voltajes es ascendente (positiva).\n')
+fprintf('loam: numero maximo de valores logicos contiguos que son descendentes, de acuerdo a loa.\n')
+fprintf('loas: sumatoria de valores logicos ascendentes contiguos individuales de acuerdo a loa.\n')
+fprintf('lod:  valores logicos cuya diferencia de voltajes es descendente (negativa).\n')
+fprintf('lodm: numero maximo de valores logicos contiguos que son descendentes, de acuerdo a lod.\n')
+fprintf('lods: sumatoria de valores logicos descendentes contiguos individuales de acuerdo a lod.\n')
+fprintf('mv:   media aritmetica de los voltajes.\n')
+fprintf('mdv:  media aritmetica de la diferencia de voltajes.\n')
+fprintf('sdv:  desviacion estandar de la diferencia de voltajes contiguos.\n')
+fprintf('sv:   desviacion estandar de los voltajes.\n')
+fprintf('v:    voltajes registrados en 8 canales, con 10 bloques cada canal (formato general).\n')
+fprintf('vdv:  vector resultante de la diferencia de voltajes multiplicada por la potencia angular.\n')
+fprintf('vv:   varianza de los voltajes.\n')
+
+
+toc % Intentando llevar una nocion adecuada de los tiempos.
 
 
 %%
-% Codigo creado por *Miguel Angel Santos Saldivar* en Julio 2017
+% Codigo creado por *Miguel Angel Santos Saldivar* un Julio de 2017.
