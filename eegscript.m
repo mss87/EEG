@@ -229,11 +229,48 @@ for ii = 1:8
 end
 clear('ii','jj','kk')
 
+%%
+% Asignacion de variables loam y lodm con los valores maximos de elementos
+% contiguos > 0 y < 0 respectivamente.
 
+loam = cell(1,8);
+lodm = cell(1,8);
+for ii = 1:8
+    loam{ii} = zeros(1,10);
+    lodm{ii} = zeros(1,10);
+end
+clear ii
 
+for ii = 1:8
+    for jj = 1:10
+        loam{ii}(jj) = max(loa{ii}{jj});
+        lodm{ii}(jj) = max(lod{ii}{jj});
+    end
+end
+clear('ii','jj')
 
+%%
+% Asignacion de variable sloa y slod para la suma de valores contiguos
+% totales, determinando la totalidad de hemi-ondas positivas y negativas de
+% donde 1 = 1/250 segundos, tomando en cuenta un registro a 250 Hz.
+%%
+% Debido a que para existir valores >1, previamente  deben existir existir
+% valores 1...n-1, cuando n es >1 se restara al valor n-1 el valor de n.
 
+for ii = 1:8
+    for jj = 1:10
+        for kk = 1:8
+        sloa{ii}{jj}{kk} = sum(loa{ii}{jj} == kk);
+        slod{ii}{jj}{kk} = sum(lod{ii}{jj} == kk);
+        if kk > 1
+            sloa{ii}{jj}{kk - 1} = (sloa{ii}{jj}{kk - 1}) - (sloa{ii}{jj}{kk});
+            slod{ii}{jj}{kk - 1} = (slod{ii}{jj}{kk - 1}) - (slod{ii}{jj}{kk});
+        end
+        end
+    end
+end
 
+toc
 
 
 %%
