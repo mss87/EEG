@@ -9,3 +9,5 @@ Partiendo de esa informacion estoy tratando de lograr un abordaje hecho a la med
 El script esta orientado particularmente a un experimento concreto que estoy desarrollando, en base a ello son los tiempos utilizados.
 
 En este experimento el primer minuto consiste en la produccion de ondas alfas, por lo tanto el primer minuto está destinado a un abordaje especial.
+
+Los siguientes minutos son abordados en una serie de bloques por cada canal, con un total de 8 canales.
