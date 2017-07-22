@@ -355,9 +355,7 @@ fprintf('v:    voltajes registrados en 8 canales, con 10 bloques cada canal (for
 fprintf('vdv:  vector resultante de la diferencia de voltajes multiplicada por la potencia angular.\n')
 fprintf('vv:   varianza de los voltajes.\n')
 
-
 toc % Intentando llevar una nocion adecuada de los tiempos.
-
 
 %%
 % Codigo creado por *Miguel Angel Santos Saldivar* un Julio de 2017.
