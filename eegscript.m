@@ -276,6 +276,8 @@ clear('ii','jj')
 % Para obtener asi los valores de _"n"_, propios de _"n"_ y no necesariamente, los
 % precursores de _"n+1"_.
 
+loas = cell(1,9);
+lods = cell(1,9);
 for ii = 1:8
     for jj = 1:10
         for kk = 1:8
@@ -290,13 +292,54 @@ for ii = 1:8
 end
 clear('ii','jj','kk')
 
+%% Integracion de Resultados
+%%
+% Con el proposito de la visualizacion de los resultados de las distintas
+% variables, en el formato general de resultados, se ha incorporado una
+% celda _x{9}_ que contiene la secuencia concatenada de resultados, en
+% donde _x_ es una variable previamente determinada y 9 es su posicion. 
+
+%%
+% En la variable _*"loas"*_ y _*"lods"*_, la celda 9 contiene ordenados los resultados
+% en una secuencia en la cual se han agrupado en columnas los numeros de
+% diferencias de voltaje del mismo sentido (±). y en filas los momentos.
+% siendo la fila del 1 al 10 los 10 momentos de canal 1, la del 11 al 20
+% los del segundo canal, etc.
+
+for ii = 1:8
+    for jj = 1:10
+        for kk = 1:8
+            ll = jj;
+            if ii > 1
+                ll = ll + ((10*ii)-10);
+            end;
+            loas{9}(ll, kk) = loas{ii}{jj}{kk};
+        end
+    end
+end
+clear('ii','jj','kk','ll')
+
+for ii = 1:8
+    for jj = 1:10
+        for kk = 1:8
+            ll = jj;
+            if ii > 1
+                ll = ll + ((10*ii)-10);
+            end;
+            lods{9}(ll, kk) = lods{ii}{jj}{kk};
+        end
+    end
+end
+clear('ii','jj','kk','ll')
+
+
 fprintf('Glosario:\n')
 fprintf('alfa: valores del primer minuto con ondas alfa provocadas.\n')
-fprintf('ang:  valores de potencia angular ±90(6 Desviaciones estandares de la diferencia de voltajes.\n')
+fprintf('ang:  valores de potencia angular ±90(6 Desviaciones estandares de la diferencia de voltajes).\n')
 fprintf('dv:   resultado de la diferencia de voltajes contiguos "n-(n-1)".\n')
 fprintf('fsdv: espacio que transcurre entre 6 desviaciones estandares (±3).\n')
 fprintf('loa:  valores logicos cuya diferencia de voltajes es ascendente (positiva).\n')
-fprintf('loam: numero maximo de valores logicos contiguos que son descendentes, de acuerdo a loa.\n')
+fprintf('loam: numero maximo de valores logicos contiguos que son ascendente, de acuerdo a loa.\n')
 fprintf('loas: sumatoria de valores logicos ascendentes contiguos individuales de acuerdo a loa.\n')
 fprintf('lod:  valores logicos cuya diferencia de voltajes es descendente (negativa).\n')
 fprintf('lodm: numero maximo de valores logicos contiguos que son descendentes, de acuerdo a lod.\n')
