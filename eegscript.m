@@ -182,7 +182,7 @@ clear('ii','jj');
 
 fprintf('Variables cartesianas determinadas correctamente.\n')
 
-%% Determinacion del Poder Espectral
+%% Determinacion de Polaridades Logicas
 %%
 % Determinacion de valores contiguos superiores a 0, asignandolos a la
 % variable _*"loa"*_ en el formato general.
