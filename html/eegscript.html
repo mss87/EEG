@@ -1,0 +1,667 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>SCRIPT PARA EL ANALISIS DE VOLTAJES CEREBRALES</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-07-22"><meta name="DC.source" content="eegscript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>SCRIPT PARA EL ANALISIS DE VOLTAJES CEREBRALES</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Apertura de Archivo CSV y Ajuste de Dimensiones</a></li><li><a href="#5">Determinacion de Medidas de Dispersion</a></li><li><a href="#9">Determinacion de Variables Cartesianas</a></li><li><a href="#16">Determinacion del Poder Espectral</a></li><li><a href="#23">Integracion de Resultados</a></li><li><a href="#26">Glosario</a></li></ul></div><h2>Apertura de Archivo CSV y Ajuste de Dimensiones<a name="1"></a></h2><p>Apertura de archivo y asignacion de la variable <i><b>"eeg"</b></i>.</p><pre class="codeinput">[Num,eeg] = uigetfile(<span class="string">'*.csv'</span>,<span class="string">'Selecciona los voltajes'</span>); tic;
+eeg = [eeg Num];
+eeg = csvread(eeg);
+</pre><p>Generacion de variable <i><b>"alfa"</b></i> de 8 celdas, cada una con los 15,000 voltajes del primer minuto de cada canal.</p><pre class="codeinput">alfa = cell(1,8);
+<span class="keyword">for</span> ii = 1:8
+    alfa{ii} = eeg(1:15000, ii);
+<span class="keyword">end</span>
+clear <span class="string">ii</span>
+</pre><p>Ajuste de dimensiones de la variable <i><b>"eeg"</b></i> para contener los 500 segundos que dura el experimento, es decir, 125,000 voltajes de un registro realizado a 250 Hz.</p><pre class="codeinput">eeg = eeg((end-124999:end),:);
+</pre><p>Ajuste de canales en una variable <i><b>"v"</b></i> de 8 celdas, una celda por cada canal. A su vez en cada canal se distribuiran los voltajes en 10 celdas, cada una con 12,500 voltajes, o 50 segundos a 250 Hz.</p><pre class="codeinput">b = 12500;
+<span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        <span class="keyword">if</span> jj == 1
+            bb = 1;
+        <span class="keyword">else</span>
+            bb = (b*jj)-b;
+        <span class="keyword">end</span>
+    v{ii}{jj} = eeg(bb:((bb+b)-1),ii);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear (<span class="string">'b'</span>,<span class="string">'bb'</span>,<span class="string">'eeg'</span>,<span class="string">'ii'</span>,<span class="string">'jj'</span>);
+
+fprintf(<span class="string">'Importacion de archivo %s y ajuste de dimensiones realizada correctamente.\n'</span>, Num);
+clear <span class="string">Num</span>;
+</pre><h2>Determinacion de Medidas de Dispersion<a name="5"></a></h2><p>Determinacion de la media aritmetica, asignandola a la variable <i><b>"mv"</b></i>. 8 canales con 10 bloques, cada cual conteniendo la media aritmetica de los 12,500 voltajes de su bloque.</p><pre class="codeinput"><span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        mv{ii}{jj} = mean(v{ii}{jj});
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>);
+</pre><p>Determinacion de la varianza, asignandola a la variable <i><b>"vv"</b></i>. 8 canales con 10 bloques, cada cual conteniendo la varianza de los 12,500 voltajes de su bloque.</p><pre class="codeinput"><span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        vv{ii}{jj} = var(v{ii}{jj});
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>);
+</pre><p>Determinacion de la desviacion estandar, asignadola a la variable <i><b>"sv"</b></i>. 8 canales con 10 bloques, cada cual conteniendo la desviacion estandar de los 12,500 voltajes de su bloque.</p><pre class="codeinput"><span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        sv{ii}{jj} = std(v{ii}{jj});
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>);
+
+fprintf(<span class="string">'Medidas de dispersion (media, varianza y desviacion estandar) calculadas correctamente.\n'</span>);
+</pre><h2>Determinacion de Variables Cartesianas<a name="9"></a></h2><p>Calculo de diferencias de numeros contiguos, asignandolos a la variable <i><b>"dv"</b></i>, en el formato <i>x{y}{z}</i>, en donde <i>"x"</i> es la variable; <i>"y"</i> el canal del 1 al 8, y <i>"z"</i> el bloque del 1 al 10 cada cual con 12,500 digitos.</p><pre class="codeinput"><span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        dv{ii}{jj} = diff(v{ii}{jj});
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>)
+
+<span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        dv{ii}{jj}(12500) = (v{ii}{jj}(12500)) - (v{ii}{jj}(12499));
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>)
+</pre><p>Determinacion de la desviacion estandar de las diferencias de voltaje, asignandolas a la variable <i><b>"sdv"</b></i> en el formato general <i>x{y}{z}</i>.</p><pre class="codeinput"><span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        sdv{ii}{jj} = std(dv{ii}{jj});
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>);
+</pre><p>Determinacion del espacio en el que transcurren las diferencias de voltaje, de &plusmn;3 desviaciones estandares de la diferencia de sus voltajes, asignandolos a la variable <i><b>"fsdv"</b></i> en el formato general.</p><pre class="codeinput"><span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        fsdv{ii}{jj} = (6).*(sdv{ii}{jj});
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>);
+</pre><p>Determinacion de la media aritmetica de la diferencia de voltajes, asignada a la variable <i><b>"mdv"</b></i></p><pre class="codeinput">mdv = cell(1,8);
+<span class="keyword">for</span> ii = 1:8
+    mdv{ii} = zeros(1,10);
+<span class="keyword">end</span>
+clear <span class="string">ii</span>;
+
+<span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        mdv{ii}(jj) = mean(dv{ii}{jj});
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>);
+</pre><p>Determinacion de la potencia angular, partiendo de la distribucion de &plusmn;90 grados de &plusmn;3 desviaciones estandares de las diferencias de voltaje, considerando ese rango como el hemicirculo propio de la distribucion anterograda del voltaje a travez del vector del tiempo. La variable <i><b>"ang"</b></i> contendra en el formato general, la potencia angular calculada como &plusmn;90 grados entre 6 desviaciones estandares de la diferencia voltaica.</p><pre class="codeinput"><span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        ang{ii}{jj} = (fsdv{ii}{jj}) / 90;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>);
+</pre><p>Determinacion del vector resultante de la multiplicacion de la diferencia de voltajes y la potencia angular, asignandoles la variable <i><b>"vdv"</b></i> en el formato general.</p><pre class="codeinput">vdv = cell(1,8);
+<span class="keyword">for</span> ii = 1:8
+    vdv{ii} = cell(1,10);
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>);
+
+<span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        <span class="keyword">for</span> kk = 1:12500
+            vdv{ii}{jj}(kk) = dv{ii}{jj}(kk) .* (ang{ii}{jj});
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>);
+
+fprintf(<span class="string">'Variables cartesianas determinadas correctamente.\n'</span>)
+</pre><h2>Determinacion del Poder Espectral<a name="16"></a></h2><p>Determinacion de valores contiguos superiores a 0, asignandolos a la variable <i><b>"loa"</b></i> en el formato general.</p><pre class="codeinput"><span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        ploa{ii}{jj} = vdv{ii}{jj} &gt; 0;
+        ploa{ii}{jj}(1) = 0;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>)
+
+loa = cell(1,8);
+<span class="keyword">for</span> ii = 1:8
+    loa{ii} = cell(1,10);
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>);
+
+<span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        <span class="keyword">for</span> kk = 1:12500
+            <span class="keyword">if</span> ploa{ii}{jj}(kk) == 1
+               loa{ii}{jj}(kk) = ploa{ii}{jj}(kk) + loa{ii}{jj}(kk-1);
+            <span class="keyword">else</span>
+                loa{ii}{jj}(kk) = 0;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>,<span class="string">'kk'</span>,<span class="string">'ploa'</span>)
+</pre><p>Determinacion de valores contiguos inferiores a 0, asignandolos a la variable <i><b>"lod"</b></i> en el formato general.</p><pre class="codeinput"><span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        plod{ii}{jj} = vdv{ii}{jj} &lt; 0;
+        plod{ii}{jj}(1) = 0;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>)
+
+lod = cell(1,8);
+<span class="keyword">for</span> ii = 1:8
+    lod{ii} = cell(1,10);
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>);
+
+<span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        <span class="keyword">for</span> kk = 1:12500
+            <span class="keyword">if</span> plod{ii}{jj}(kk) == 1
+               lod{ii}{jj}(kk) = plod{ii}{jj}(kk) + lod{ii}{jj}(kk-1);
+            <span class="keyword">else</span>
+                lod{ii}{jj}(kk) = 0;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>,<span class="string">'kk'</span>,<span class="string">'plod'</span>)
+</pre><p>Asignacion de variables <i><b>"loam"</b></i> y <i><b>"lodm"</b></i> con los valores maximos de elementos contiguos mayores y menores a 0 respectivamente.</p><pre class="codeinput">loam = cell(1,8);
+lodm = cell(1,8);
+<span class="keyword">for</span> ii = 1:8
+    loam{ii} = zeros(1,10);
+    lodm{ii} = zeros(1,10);
+<span class="keyword">end</span>
+clear <span class="string">ii</span>
+
+<span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        loam{ii}(jj) = max(loa{ii}{jj});
+        lodm{ii}(jj) = max(lod{ii}{jj});
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>)
+</pre><p>Asignacion de variable <i><b>"loas"</b></i> y <i><b>"lods"</b></i> para la suma de valores contiguos totales, determinando la totalidad de <i>hemi-ondas</i> positivas y negativas de donde 1 = 1/250 segundos, tomando en cuenta un registro a 250 Hz.</p><p>Debido a que para existir valores &gt;1, previamente  deben existir existir valores 1..._"n-1"_, cuando <i>"n"</i> es &gt;1 se restara al valor <i>"n-1"</i> el valor de <i>"n"</i>. Para obtener asi los valores de <i>"n"</i>, propios de <i>"n"</i> y no necesariamente, los precursores de <i>"n+1"</i>.</p><pre class="codeinput">loas = cell(1,9);
+lods = cell(1,9);
+<span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        <span class="keyword">for</span> kk = 1:8
+        loas{ii}{jj}{kk} = sum(loa{ii}{jj} == kk);
+        lods{ii}{jj}{kk} = sum(lod{ii}{jj} == kk);
+        <span class="keyword">if</span> kk &gt; 1
+            loas{ii}{jj}{kk - 1} = (loas{ii}{jj}{kk - 1}) - (loas{ii}{jj}{kk});
+            lods{ii}{jj}{kk - 1} = (lods{ii}{jj}{kk - 1}) - (lods{ii}{jj}{kk});
+        <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>,<span class="string">'kk'</span>)
+</pre><h2>Integracion de Resultados<a name="23"></a></h2><p>Con el proposito de la visualizacion de los resultados de las distintas variables, en el formato general de resultados, se ha incorporado una celda <i>x{9}</i> que contiene la secuencia concatenada de resultados, en donde <i>x</i> es una variable previamente determinada y 9 es su posicion.</p><p>En la variable <i><b>"loas"</b></i> y <i><b>"lods"</b></i>, la celda 9 contiene ordenados los resultados en una secuencia en la cual se han agrupado en columnas los numeros de diferencias de voltaje del mismo sentido (&plusmn;). y en filas los momentos. siendo la fila del 1 al 10 los 10 momentos de canal 1, la del 11 al 20 los del segundo canal, etc.</p><pre class="codeinput"><span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        <span class="keyword">for</span> kk = 1:8
+            ll = jj;
+            <span class="keyword">if</span> ii &gt; 1
+                ll = ll + ((10*ii)-10);
+            <span class="keyword">end</span>
+            loas{9}(ll, kk) = loas{ii}{jj}{kk};
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>,<span class="string">'kk'</span>,<span class="string">'ll'</span>)
+
+<span class="keyword">for</span> ii = 1:8
+    <span class="keyword">for</span> jj = 1:10
+        <span class="keyword">for</span> kk = 1:8
+            ll = jj;
+            <span class="keyword">if</span> ii &gt; 1
+                ll = ll + ((10*ii)-10);
+            <span class="keyword">end</span>
+            lods{9}(ll, kk) = lods{ii}{jj}{kk};
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>,<span class="string">'kk'</span>,<span class="string">'ll'</span>)
+</pre><h2>Glosario<a name="26"></a></h2><p>Glosario de variables calculadas.</p><pre class="codeinput">fprintf(<span class="string">'Glosario:\n'</span>)
+fprintf(<span class="string">'alfa: valores del primer minuto con ondas alfa provocadas.\n'</span>)
+fprintf(<span class="string">'ang:  valores de potencia angular &plusmn;90(6 Desviaciones estandares de la diferencia de voltajes).\n'</span>)
+fprintf(<span class="string">'dv:   resultado de la diferencia de voltajes contiguos "n-(n-1)".\n'</span>)
+fprintf(<span class="string">'fsdv: espacio que transcurre entre 6 desviaciones estandares (&plusmn;3).\n'</span>)
+fprintf(<span class="string">'loa:  valores logicos cuya diferencia de voltajes es ascendente (positiva).\n'</span>)
+fprintf(<span class="string">'loam: numero maximo de valores logicos contiguos que son ascendente, de acuerdo a loa.\n'</span>)
+fprintf(<span class="string">'loas: sumatoria de valores logicos ascendentes contiguos individuales de acuerdo a loa.\n'</span>)
+fprintf(<span class="string">'lod:  valores logicos cuya diferencia de voltajes es descendente (negativa).\n'</span>)
+fprintf(<span class="string">'lodm: numero maximo de valores logicos contiguos que son descendentes, de acuerdo a lod.\n'</span>)
+fprintf(<span class="string">'lods: sumatoria de valores logicos descendentes contiguos individuales de acuerdo a lod.\n'</span>)
+fprintf(<span class="string">'mv:   media aritmetica de los voltajes.\n'</span>)
+fprintf(<span class="string">'mdv:  media aritmetica de la diferencia de voltajes.\n'</span>)
+fprintf(<span class="string">'sdv:  desviacion estandar de la diferencia de voltajes contiguos.\n'</span>)
+fprintf(<span class="string">'sv:   desviacion estandar de los voltajes.\n'</span>)
+fprintf(<span class="string">'v:    voltajes registrados en 8 canales, con 10 bloques cada canal (formato general).\n'</span>)
+fprintf(<span class="string">'vdv:  vector resultante de la diferencia de voltajes multiplicada por la potencia angular.\n'</span>)
+fprintf(<span class="string">'vv:   varianza de los voltajes.\n'</span>)
+
+
+toc <span class="comment">% Intentando llevar una nocion adecuada de los tiempos.</span>
+</pre><p>Codigo creado por <b>Miguel Angel Santos Saldivar</b> un Julio de 2017.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% SCRIPT PARA EL ANALISIS DE VOLTAJES CEREBRALES
+%%
+%% Apertura de Archivo CSV y Ajuste de Dimensiones
+% Apertura de archivo y asignacion de la variable _*"eeg"*_. 
+
+[Num,eeg] = uigetfile('*.csv','Selecciona los voltajes'); tic;
+eeg = [eeg Num];
+eeg = csvread(eeg);
+
+%%
+% Generacion de variable _*"alfa"*_ de 8 celdas, cada una con los 15,000
+% voltajes del primer minuto de cada canal.
+
+alfa = cell(1,8);
+for ii = 1:8
+    alfa{ii} = eeg(1:15000, ii);
+end
+clear ii
+
+%%
+% Ajuste de dimensiones de la variable _*"eeg"*_ para contener los 500
+% segundos que dura el experimento, es decir, 125,000 voltajes de un
+% registro realizado a 250 Hz.
+
+eeg = eeg((end-124999:end),:);
+
+%%
+% Ajuste de canales en una variable _*"v"*_ de 8 celdas, una celda por
+% cada canal. A su vez en cada canal se distribuiran los voltajes en 10
+% celdas, cada una con 12,500 voltajes, o 50 segundos a 250 Hz.
+
+b = 12500;
+for ii = 1:8
+    for jj = 1:10
+        if jj == 1
+            bb = 1;
+        else
+            bb = (b*jj)-b;
+        end
+    v{ii}{jj} = eeg(bb:((bb+b)-1),ii);
+    end
+end
+clear ('b','bb','eeg','ii','jj');
+
+fprintf('Importacion de archivo %s y ajuste de dimensiones realizada correctamente.\n', Num);
+clear Num;
+
+%% Determinacion de Medidas de Dispersion
+%%
+% Determinacion de la media aritmetica, asignandola a la variable _*"mv"*_. 
+% 8 canales con 10 bloques, cada cual conteniendo la media aritmetica
+% de los 12,500 voltajes de su bloque.
+
+for ii = 1:8
+    for jj = 1:10
+        mv{ii}{jj} = mean(v{ii}{jj});
+    end
+end
+clear('ii','jj');
+
+%%
+% Determinacion de la varianza, asignandola a la variable _*"vv"*_. 
+% 8 canales con 10 bloques, cada cual conteniendo la varianza
+% de los 12,500 voltajes de su bloque.
+
+for ii = 1:8
+    for jj = 1:10
+        vv{ii}{jj} = var(v{ii}{jj});
+    end
+end
+clear('ii','jj');
+
+%%
+% Determinacion de la desviacion estandar, asignadola a la variable _*"sv"*_. 
+% 8 canales con 10 bloques, cada cual conteniendo la desviacion estandar
+% de los 12,500 voltajes de su bloque.
+
+for ii = 1:8
+    for jj = 1:10
+        sv{ii}{jj} = std(v{ii}{jj});
+    end
+end
+clear('ii','jj');
+
+fprintf('Medidas de dispersion (media, varianza y desviacion estandar) calculadas correctamente.\n');
+
+%% Determinacion de Variables Cartesianas
+%%
+% Calculo de diferencias de numeros contiguos, asignandolos a la variable
+% _*"dv"*_, en el formato _x{y}{z}_, en donde _"x"_ es la variable; _"y"_ 
+% el canal del 1 al 8, y _"z"_ el bloque del 1 al 10 cada cual con 12,500 digitos. 
+
+for ii = 1:8
+    for jj = 1:10
+        dv{ii}{jj} = diff(v{ii}{jj});
+    end
+end
+clear('ii','jj')
+
+for ii = 1:8
+    for jj = 1:10
+        dv{ii}{jj}(12500) = (v{ii}{jj}(12500)) - (v{ii}{jj}(12499));
+    end
+end
+clear('ii','jj')
+
+%%
+% Determinacion de la desviacion estandar de las diferencias de voltaje,
+% asignandolas a la variable _*"sdv"*_ en el formato general _x{y}{z}_.
+
+for ii = 1:8
+    for jj = 1:10
+        sdv{ii}{jj} = std(dv{ii}{jj});
+    end
+end
+clear('ii','jj');
+
+%%
+% Determinacion del espacio en el que transcurren las diferencias de
+% voltaje, de ±3 desviaciones estandares de la diferencia de sus
+% voltajes, asignandolos a la variable _*"fsdv"*_ en el formato general.
+
+for ii = 1:8
+    for jj = 1:10
+        fsdv{ii}{jj} = (6).*(sdv{ii}{jj});
+    end
+end
+clear('ii','jj');
+
+%%
+% Determinacion de la media aritmetica de la diferencia de voltajes,
+% asignada a la variable _*"mdv"*_
+
+mdv = cell(1,8);
+for ii = 1:8
+    mdv{ii} = zeros(1,10);
+end
+clear ii;
+
+for ii = 1:8
+    for jj = 1:10
+        mdv{ii}(jj) = mean(dv{ii}{jj});
+    end
+end
+clear('ii','jj');
+
+%%
+% Determinacion de la potencia angular, partiendo de la distribucion de ±90
+% grados de ±3 desviaciones estandares de las diferencias de voltaje,
+% considerando ese rango como el hemicirculo propio de la distribucion
+% anterograda del voltaje a travez del vector del tiempo. La variable
+% _*"ang"*_ contendra en el formato general, la potencia angular calculada
+% como ±90 grados entre 6 desviaciones estandares de la diferencia
+% voltaica.
+
+for ii = 1:8
+    for jj = 1:10
+        ang{ii}{jj} = (fsdv{ii}{jj}) / 90;
+    end
+end
+clear('ii','jj');
+
+%%
+% Determinacion del vector resultante de la multiplicacion de la diferencia
+% de voltajes y la potencia angular, asignandoles la variable _*"vdv"*_ en
+% el formato general.
+
+vdv = cell(1,8);
+for ii = 1:8
+    vdv{ii} = cell(1,10);
+end
+clear('ii','jj');
+
+for ii = 1:8
+    for jj = 1:10
+        for kk = 1:12500
+            vdv{ii}{jj}(kk) = dv{ii}{jj}(kk) .* (ang{ii}{jj});
+        end
+    end
+end
+clear('ii','jj');
+
+fprintf('Variables cartesianas determinadas correctamente.\n')
+
+%% Determinacion del Poder Espectral
+%%
+% Determinacion de valores contiguos superiores a 0, asignandolos a la
+% variable _*"loa"*_ en el formato general.
+
+for ii = 1:8
+    for jj = 1:10
+        ploa{ii}{jj} = vdv{ii}{jj} > 0;
+        ploa{ii}{jj}(1) = 0; 
+    end
+end
+clear('ii','jj')
+
+loa = cell(1,8);
+for ii = 1:8
+    loa{ii} = cell(1,10);
+end
+clear('ii','jj');
+
+for ii = 1:8
+    for jj = 1:10
+        for kk = 1:12500
+            if ploa{ii}{jj}(kk) == 1
+               loa{ii}{jj}(kk) = ploa{ii}{jj}(kk) + loa{ii}{jj}(kk-1);
+            else 
+                loa{ii}{jj}(kk) = 0;
+            end
+        end
+    end
+end
+clear('ii','jj','kk','ploa')
+
+%%
+%%
+% Determinacion de valores contiguos inferiores a 0, asignandolos a la
+% variable _*"lod"*_ en el formato general.
+
+for ii = 1:8
+    for jj = 1:10
+        plod{ii}{jj} = vdv{ii}{jj} < 0;
+        plod{ii}{jj}(1) = 0; 
+    end
+end
+clear('ii','jj')
+
+lod = cell(1,8);
+for ii = 1:8
+    lod{ii} = cell(1,10);
+end
+clear('ii','jj');
+
+for ii = 1:8
+    for jj = 1:10
+        for kk = 1:12500
+            if plod{ii}{jj}(kk) == 1
+               lod{ii}{jj}(kk) = plod{ii}{jj}(kk) + lod{ii}{jj}(kk-1);
+            else 
+                lod{ii}{jj}(kk) = 0;
+            end
+        end
+    end
+end
+clear('ii','jj','kk','plod')
+
+%%
+% Asignacion de variables _*"loam"*_ y _*"lodm"*_ con los valores maximos de elementos
+% contiguos mayores y menores a 0 respectivamente.
+
+loam = cell(1,8);
+lodm = cell(1,8);
+for ii = 1:8
+    loam{ii} = zeros(1,10);
+    lodm{ii} = zeros(1,10);
+end
+clear ii
+
+for ii = 1:8
+    for jj = 1:10
+        loam{ii}(jj) = max(loa{ii}{jj});
+        lodm{ii}(jj) = max(lod{ii}{jj});
+    end
+end
+clear('ii','jj')
+
+%%
+% Asignacion de variable _*"loas"*_ y _*"lods"*_ para la suma de valores contiguos
+% totales, determinando la totalidad de _hemi-ondas_ positivas y negativas de
+% donde 1 = 1/250 segundos, tomando en cuenta un registro a 250 Hz.
+%%
+% Debido a que para existir valores >1, previamente  deben existir existir
+% valores 1..._"n-1"_, cuando _"n"_ es >1 se restara al valor _"n-1"_ el valor de _"n"_.
+% Para obtener asi los valores de _"n"_, propios de _"n"_ y no necesariamente, los
+% precursores de _"n+1"_.
+
+loas = cell(1,9);
+lods = cell(1,9);
+for ii = 1:8
+    for jj = 1:10
+        for kk = 1:8
+        loas{ii}{jj}{kk} = sum(loa{ii}{jj} == kk);
+        lods{ii}{jj}{kk} = sum(lod{ii}{jj} == kk);
+        if kk > 1
+            loas{ii}{jj}{kk - 1} = (loas{ii}{jj}{kk - 1}) - (loas{ii}{jj}{kk});
+            lods{ii}{jj}{kk - 1} = (lods{ii}{jj}{kk - 1}) - (lods{ii}{jj}{kk});
+        end
+        end
+    end
+end
+clear('ii','jj','kk')
+
+%% Integracion de Resultados
+%%
+% Con el proposito de la visualizacion de los resultados de las distintas
+% variables, en el formato general de resultados, se ha incorporado una
+% celda _x{9}_ que contiene la secuencia concatenada de resultados, en
+% donde _x_ es una variable previamente determinada y 9 es su posicion. 
+
+%%
+% En la variable _*"loas"*_ y _*"lods"*_, la celda 9 contiene ordenados los resultados
+% en una secuencia en la cual se han agrupado en columnas los numeros de
+% diferencias de voltaje del mismo sentido (±). y en filas los momentos.
+% siendo la fila del 1 al 10 los 10 momentos de canal 1, la del 11 al 20
+% los del segundo canal, etc.
+
+for ii = 1:8
+    for jj = 1:10
+        for kk = 1:8
+            ll = jj;
+            if ii > 1
+                ll = ll + ((10*ii)-10);
+            end
+            loas{9}(ll, kk) = loas{ii}{jj}{kk};
+        end
+    end
+end
+clear('ii','jj','kk','ll')
+
+for ii = 1:8
+    for jj = 1:10
+        for kk = 1:8
+            ll = jj;
+            if ii > 1
+                ll = ll + ((10*ii)-10);
+            end
+            lods{9}(ll, kk) = lods{ii}{jj}{kk};
+        end
+    end
+end
+clear('ii','jj','kk','ll')
+
+%% Glosario
+%%
+% Glosario de variables calculadas.
+
+fprintf('Glosario:\n')
+fprintf('alfa: valores del primer minuto con ondas alfa provocadas.\n')
+fprintf('ang:  valores de potencia angular ±90(6 Desviaciones estandares de la diferencia de voltajes).\n')
+fprintf('dv:   resultado de la diferencia de voltajes contiguos "n-(n-1)".\n')
+fprintf('fsdv: espacio que transcurre entre 6 desviaciones estandares (±3).\n')
+fprintf('loa:  valores logicos cuya diferencia de voltajes es ascendente (positiva).\n')
+fprintf('loam: numero maximo de valores logicos contiguos que son ascendente, de acuerdo a loa.\n')
+fprintf('loas: sumatoria de valores logicos ascendentes contiguos individuales de acuerdo a loa.\n')
+fprintf('lod:  valores logicos cuya diferencia de voltajes es descendente (negativa).\n')
+fprintf('lodm: numero maximo de valores logicos contiguos que son descendentes, de acuerdo a lod.\n')
+fprintf('lods: sumatoria de valores logicos descendentes contiguos individuales de acuerdo a lod.\n')
+fprintf('mv:   media aritmetica de los voltajes.\n')
+fprintf('mdv:  media aritmetica de la diferencia de voltajes.\n')
+fprintf('sdv:  desviacion estandar de la diferencia de voltajes contiguos.\n')
+fprintf('sv:   desviacion estandar de los voltajes.\n')
+fprintf('v:    voltajes registrados en 8 canales, con 10 bloques cada canal (formato general).\n')
+fprintf('vdv:  vector resultante de la diferencia de voltajes multiplicada por la potencia angular.\n')
+fprintf('vv:   varianza de los voltajes.\n')
+
+
+toc % Intentando llevar una nocion adecuada de los tiempos.
+
+
+%%
+% Codigo creado por *Miguel Angel Santos Saldivar* un Julio de 2017.
+
+##### SOURCE END #####
+--></body></html>
