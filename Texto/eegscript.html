@@ -236,7 +236,7 @@ clear <span class="string">ii</span>
     <span class="keyword">end</span>
 <span class="keyword">end</span>
 clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>)
-</pre><p>Asignacion de variable <i><b>"loas"</b></i> y <i><b>"lods"</b></i> para la suma de valores contiguos totales, determinando la totalidad de <i>hemi-ondas</i> positivas y negativas de donde 1 = 1/250 segundos, tomando en cuenta un registro a 250 Hz.</p><p>Debido a que para existir valores &gt;1, previamente  deben existir existir valores 1..._"n-1"_, cuando <i>"n"</i> es &gt;1 se restara al valor <i>"n-1"</i> el valor de <i>"n"</i>. Para obtener asi los valores de <i>"n"</i>, propios de <i>"n"</i> y no necesariamente, los precursores de <i>"n+1"</i>.</p><pre class="codeinput">loas = cell(1,9);
+</pre><p>Asignacion de variable <i><b>"loas"</b></i> y <i><b>"lods"</b></i> para la suma de valores contiguos totales, determinando la totalidad de <i>hemi-ondas</i> positivas y negativas de donde 1 = 1/250 segundos, tomando en cuenta un registro a 250 Hz.</p><p>Debido a que para existir valores &gt;1, previamente  deben existir existir valores 1... <i>"n-1"</i>, cuando <i>"n"</i> es &gt;1 se restara al valor <i>"n-1"</i> el valor de <i>"n"</i>. Para obtener asi los valores de <i>"n"</i>, propios de <i>"n"</i> y no necesariamente, los precursores de <i>"n+1"</i>.</p><pre class="codeinput">loas = cell(1,9);
 lods = cell(1,9);
 <span class="keyword">for</span> ii = 1:8
     <span class="keyword">for</span> jj = 1:10
@@ -302,6 +302,7 @@ toc <span class="comment">% Intentando llevar una nocion adecuada de los tiempos
 %%
 %% Apertura de Archivo CSV y Ajuste de Dimensiones
 % Apertura de archivo y asignacion de la variable _*"eeg"*_. 
+%
 
 [Num,eeg] = uigetfile('*.csv','Selecciona los voltajes'); tic;
 eeg = [eeg Num];
@@ -572,7 +573,7 @@ clear('ii','jj')
 % donde 1 = 1/250 segundos, tomando en cuenta un registro a 250 Hz.
 %%
 % Debido a que para existir valores >1, previamente  deben existir existir
-% valores 1..._"n-1"_, cuando _"n"_ es >1 se restara al valor _"n-1"_ el valor de _"n"_.
+% valores 1... _"n-1"_, cuando _"n"_ es >1 se restara al valor _"n-1"_ el valor de _"n"_.
 % Para obtener asi los valores de _"n"_, propios de _"n"_ y no necesariamente, los
 % precursores de _"n+1"_.
 

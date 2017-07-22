@@ -2,6 +2,7 @@
 %%
 %% Apertura de Archivo CSV y Ajuste de Dimensiones
 % Apertura de archivo y asignacion de la variable _*"eeg"*_. 
+%
 
 [Num,eeg] = uigetfile('*.csv','Selecciona los voltajes'); tic;
 eeg = [eeg Num];
@@ -272,7 +273,7 @@ clear('ii','jj')
 % donde 1 = 1/250 segundos, tomando en cuenta un registro a 250 Hz.
 %%
 % Debido a que para existir valores >1, previamente  deben existir existir
-% valores 1..._"n-1"_, cuando _"n"_ es >1 se restara al valor _"n-1"_ el valor de _"n"_.
+% valores 1... _"n-1"_, cuando _"n"_ es >1 se restara al valor _"n-1"_ el valor de _"n"_.
 % Para obtener asi los valores de _"n"_, propios de _"n"_ y no necesariamente, los
 % precursores de _"n+1"_.
 
