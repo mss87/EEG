@@ -332,6 +332,10 @@ for ii = 1:8
 end
 clear('ii','jj','kk','ll')
 
+%%
+% Integracion de las variables de los vectores calculados, siguiendo el
+% mismo formato, bajo la variable _*"vdv"*_.
+
 %% Glosario
 %%
 % Glosario de variables calculadas.
