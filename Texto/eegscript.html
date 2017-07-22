@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>SCRIPT PARA EL ANALISIS DE VOLTAJES CEREBRALES</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Apertura de Archivo CSV y Ajuste de Dimensiones</a></li><li><a href="#5">Determinacion de Medidas de Dispersion</a></li><li><a href="#9">Determinacion de Variables Cartesianas</a></li><li><a href="#16">Determinacion de Polaridades Logicas</a></li><li><a href="#23">Integracion de Resultados</a></li><li><a href="#26">Glosario</a></li></ul></div><h2>Apertura de Archivo CSV y Ajuste de Dimensiones<a name="1"></a></h2><p>Apertura de archivo y asignacion de la variable <i><b>"eeg"</b></i>.</p><pre class="codeinput">[Num,eeg] = uigetfile(<span class="string">'*.csv'</span>,<span class="string">'Selecciona los voltajes'</span>); tic;
+  </style></head><body><div class="content"><h1>SCRIPT PARA EL ANALISIS DE VOLTAJES CEREBRALES</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Apertura de Archivo CSV y Ajuste de Dimensiones</a></li><li><a href="#5">Determinacion de Medidas de Dispersion</a></li><li><a href="#9">Determinacion de Variables Cartesianas</a></li><li><a href="#16">Determinacion de Polaridades Logicas</a></li><li><a href="#23">Integracion de Resultados</a></li><li><a href="#27">Glosario</a></li></ul></div><h2>Apertura de Archivo CSV y Ajuste de Dimensiones<a name="1"></a></h2><p>Apertura de archivo y asignacion de la variable <i><b>"eeg"</b></i>.</p><pre class="codeinput">[Num,eeg] = uigetfile(<span class="string">'*.csv'</span>,<span class="string">'Selecciona los voltajes'</span>); tic;
 eeg = [eeg Num];
 eeg = csvread(eeg);
 </pre><p>Generacion de variable <i><b>"alfa"</b></i> de 8 celdas, cada una con los 15,000 voltajes del primer minuto de cada canal.</p><pre class="codeinput">alfa = cell(1,8);
@@ -276,7 +276,7 @@ clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>,<span cl
     <span class="keyword">end</span>
 <span class="keyword">end</span>
 clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>,<span class="string">'kk'</span>,<span class="string">'ll'</span>)
-</pre><h2>Glosario<a name="26"></a></h2><p>Glosario de variables calculadas.</p><pre class="codeinput">fprintf(<span class="string">'Glosario:\n'</span>)
+</pre><p>Integracion de las variables de los vectores calculados, siguiendo el mismo formato, bajo la variable <i><b>"vdv"</b></i>.</p><h2>Glosario<a name="27"></a></h2><p>Glosario de variables calculadas.</p><pre class="codeinput">fprintf(<span class="string">'Glosario:\n'</span>)
 fprintf(<span class="string">'alfa: valores del primer minuto con ondas alfa provocadas.\n'</span>)
 fprintf(<span class="string">'ang:  valores de potencia angular &plusmn;90(6 Desviaciones estandares de la diferencia de voltajes).\n'</span>)
 fprintf(<span class="string">'dv:   resultado de la diferencia de voltajes contiguos "n-(n-1)".\n'</span>)
@@ -294,7 +294,6 @@ fprintf(<span class="string">'sv:   desviacion estandar de los voltajes.\n'</spa
 fprintf(<span class="string">'v:    voltajes registrados en 8 canales, con 10 bloques cada canal (formato general).\n'</span>)
 fprintf(<span class="string">'vdv:  vector resultante de la diferencia de voltajes multiplicada por la potencia angular.\n'</span>)
 fprintf(<span class="string">'vv:   varianza de los voltajes.\n'</span>)
-
 
 toc <span class="comment">% Intentando llevar una nocion adecuada de los tiempos.</span>
 </pre><p>Codigo creado por <b>Miguel Angel Santos Saldivar</b> un Julio de 2017.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
@@ -633,6 +632,10 @@ for ii = 1:8
 end
 clear('ii','jj','kk','ll')
 
+%%
+% Integracion de las variables de los vectores calculados, siguiendo el
+% mismo formato, bajo la variable _*"vdv"*_.
+
 %% Glosario
 %%
 % Glosario de variables calculadas.
@@ -656,9 +659,7 @@ fprintf('v:    voltajes registrados en 8 canales, con 10 bloques cada canal (for
 fprintf('vdv:  vector resultante de la diferencia de voltajes multiplicada por la potencia angular.\n')
 fprintf('vv:   varianza de los voltajes.\n')
 
-
 toc % Intentando llevar una nocion adecuada de los tiempos.
-
 
 %%
 % Codigo creado por *Miguel Angel Santos Saldivar* un Julio de 2017.
