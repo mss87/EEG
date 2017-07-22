@@ -312,7 +312,7 @@ for ii = 1:8
             ll = jj;
             if ii > 1
                 ll = ll + ((10*ii)-10);
-            end;
+            end
             loas{9}(ll, kk) = loas{ii}{jj}{kk};
         end
     end
@@ -325,13 +325,16 @@ for ii = 1:8
             ll = jj;
             if ii > 1
                 ll = ll + ((10*ii)-10);
-            end;
+            end
             lods{9}(ll, kk) = lods{ii}{jj}{kk};
         end
     end
 end
 clear('ii','jj','kk','ll')
 
+%% Glosario
+%%
+% Glosario de variables calculadas.
 
 fprintf('Glosario:\n')
 fprintf('alfa: valores del primer minuto con ondas alfa provocadas.\n')
