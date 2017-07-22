@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>SCRIPT PARA EL ANALISIS DE VOLTAJES CEREBRALES</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Apertura de Archivo CSV y Ajuste de Dimensiones</a></li><li><a href="#5">Determinacion de Medidas de Dispersion</a></li><li><a href="#9">Determinacion de Variables Cartesianas</a></li><li><a href="#16">Determinacion del Poder Espectral</a></li><li><a href="#23">Integracion de Resultados</a></li><li><a href="#26">Glosario</a></li></ul></div><h2>Apertura de Archivo CSV y Ajuste de Dimensiones<a name="1"></a></h2><p>Apertura de archivo y asignacion de la variable <i><b>"eeg"</b></i>.</p><pre class="codeinput">[Num,eeg] = uigetfile(<span class="string">'*.csv'</span>,<span class="string">'Selecciona los voltajes'</span>); tic;
+  </style></head><body><div class="content"><h1>SCRIPT PARA EL ANALISIS DE VOLTAJES CEREBRALES</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Apertura de Archivo CSV y Ajuste de Dimensiones</a></li><li><a href="#5">Determinacion de Medidas de Dispersion</a></li><li><a href="#9">Determinacion de Variables Cartesianas</a></li><li><a href="#16">Determinacion de Polaridades Logicas</a></li><li><a href="#23">Integracion de Resultados</a></li><li><a href="#26">Glosario</a></li></ul></div><h2>Apertura de Archivo CSV y Ajuste de Dimensiones<a name="1"></a></h2><p>Apertura de archivo y asignacion de la variable <i><b>"eeg"</b></i>.</p><pre class="codeinput">[Num,eeg] = uigetfile(<span class="string">'*.csv'</span>,<span class="string">'Selecciona los voltajes'</span>); tic;
 eeg = [eeg Num];
 eeg = csvread(eeg);
 </pre><p>Generacion de variable <i><b>"alfa"</b></i> de 8 celdas, cada una con los 15,000 voltajes del primer minuto de cada canal.</p><pre class="codeinput">alfa = cell(1,8);
@@ -169,7 +169,7 @@ clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>);
 clear(<span class="string">'ii'</span>,<span class="string">'jj'</span>);
 
 fprintf(<span class="string">'Variables cartesianas determinadas correctamente.\n'</span>)
-</pre><h2>Determinacion del Poder Espectral<a name="16"></a></h2><p>Determinacion de valores contiguos superiores a 0, asignandolos a la variable <i><b>"loa"</b></i> en el formato general.</p><pre class="codeinput"><span class="keyword">for</span> ii = 1:8
+</pre><h2>Determinacion de Polaridades Logicas<a name="16"></a></h2><p>Determinacion de valores contiguos superiores a 0, asignandolos a la variable <i><b>"loa"</b></i> en el formato general.</p><pre class="codeinput"><span class="keyword">for</span> ii = 1:8
     <span class="keyword">for</span> jj = 1:10
         ploa{ii}{jj} = vdv{ii}{jj} &gt; 0;
         ploa{ii}{jj}(1) = 0;
@@ -483,7 +483,7 @@ clear('ii','jj');
 
 fprintf('Variables cartesianas determinadas correctamente.\n')
 
-%% Determinacion del Poder Espectral
+%% Determinacion de Polaridades Logicas
 %%
 % Determinacion de valores contiguos superiores a 0, asignandolos a la
 % variable _*"loa"*_ en el formato general.
