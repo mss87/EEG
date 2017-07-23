@@ -43,7 +43,7 @@ for ii = 1:8
 end
 clear ('b','bb','eeg','ii','jj');
 
-fprintf('Importacion de archivo %s y ajuste de dimensiones realizada correctamente.\n', Num);
+fprintf('\nI.    Importacion de archivo %s y ajuste de dimensiones realizada correctamente.\n', Num);
 clear Num;
 
 %% Determinacion de Medidas de Dispersion
@@ -83,7 +83,7 @@ for ii = 1:8
 end
 clear('ii','jj');
 
-fprintf('Medidas de dispersion (media, varianza y desviacion estandar) calculadas correctamente.\n');
+fprintf('II.   Medidas de dispersion (media, varianza y desviacion estandar) calculadas correctamente.\n');
 
 %% Determinacion de Variables Cartesianas
 %%
@@ -166,7 +166,7 @@ clear('ii','jj');
 % de voltajes y la potencia angular, asignandoles la variable _*"vdv"*_ en
 % el formato general.
 
-vdv = cell(1,8);
+vdv = cell(1,9);
 for ii = 1:8
     vdv{ii} = cell(1,10);
 end
@@ -181,7 +181,7 @@ for ii = 1:8
 end
 clear('ii','jj');
 
-fprintf('Variables cartesianas determinadas correctamente.\n')
+fprintf('III.  Variables cartesianas determinadas correctamente.\n')
 
 %% Determinacion de Polaridades Logicas
 %%
@@ -293,6 +293,8 @@ for ii = 1:8
 end
 clear('ii','jj','kk')
 
+fprintf('IV.   Determinacion de polaridades logicas realizada correctamente.\n')
+
 %% Integracion de Resultados
 %%
 % Con el proposito de la visualizacion de los resultados de las distintas
@@ -318,7 +320,7 @@ for ii = 1:8
         end
     end
 end
-clear('ii','jj','kk','ll')
+clear('ii','jj','kk','ll');
 
 for ii = 1:8
     for jj = 1:10
@@ -331,17 +333,32 @@ for ii = 1:8
         end
     end
 end
-clear('ii','jj','kk','ll')
+clear('ii','jj','kk','ll');
 
 %%
 % Integracion de las variables de los vectores calculados, siguiendo el
 % mismo formato, bajo la variable _*"vdv"*_.
 
+vdvd = 0;
+for ii = 1:8
+    for jj = 1:10
+        if jj > 1
+            vdvd = [vdvd vdv{ii}{jj}];
+        else
+            vdvd = vdv{ii}{jj};
+        end
+    end
+    vdv{9}(:,ii) = vdvd;
+end
+clear('ii','jj','vdvd');
+
+fprintf('V.    Resultados integrados en la posicion {9}.\n\n')
+
 %% Glosario
 %%
 % Glosario de variables calculadas.
 
-fprintf('Glosario:\n')
+fprintf('Glosario:\n\n')
 fprintf('alfa: valores del primer minuto con ondas alfa provocadas.\n')
 fprintf('ang:  valores de potencia angular ±90(6 Desviaciones estandares de la diferencia de voltajes).\n')
 fprintf('dv:   resultado de la diferencia de voltajes contiguos "n-(n-1)".\n')
@@ -358,7 +375,7 @@ fprintf('sdv:  desviacion estandar de la diferencia de voltajes contiguos.\n')
 fprintf('sv:   desviacion estandar de los voltajes.\n')
 fprintf('v:    voltajes registrados en 8 canales, con 10 bloques cada canal (formato general).\n')
 fprintf('vdv:  vector resultante de la diferencia de voltajes multiplicada por la potencia angular.\n')
-fprintf('vv:   varianza de los voltajes.\n')
+fprintf('vv:   varianza de los voltajes.\n\n')
 
 toc % Intentando llevar una nocion adecuada de los tiempos.
 
