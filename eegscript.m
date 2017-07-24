@@ -352,6 +352,23 @@ for ii = 1:8
 end
 clear('ii','jj','vdvd');
 
+%%
+% Integracion de las diferencias de voltajes
+
+vdvd = 0;
+dv{9} = zeros(125000,8);
+for ii = 1:8
+    for jj = 1:10
+        if jj > 1
+            vdvd = [vdvd; dv{ii}{jj}];
+        else
+            vdvd = dv{ii}{jj};
+        end
+    end
+    dv{9}(:,ii) = vdvd;
+end
+clear('ii','jj','vdvd');
+
 fprintf('V.    Resultados integrados en la posicion {9}.\n\n')
 
 %% Glosario
